@@ -1,3 +1,7 @@
+### Additional Information
+
+You can test it online at [calculate.ilhamriski.com]: https://calculate.ilhamriski.com
+
 ### Instructions
 
 * Clone or fork this repository.
@@ -15,7 +19,3 @@
 
 ![Bending Moment Plot](images/bending-moment-plot.png)
 ![Shear Force Plot](images/shear-force-plot.png)
-
-
-### Additional Information
-You can test it online at [calculate.ilhamriski.com]: https://calculate.ilhamriski.com

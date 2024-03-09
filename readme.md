@@ -1,6 +1,6 @@
 ### Additional Information
 
-You can test it online at [calculate.ilhamriski.com]: https://calculate.ilhamriski.com
+You can test it online at [calculate.ilhamriski.com](https://calculate.ilhamriski.com)
 
 ### Instructions
 

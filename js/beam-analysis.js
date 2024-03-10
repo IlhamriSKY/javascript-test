@@ -86,8 +86,11 @@ BeamAnalysis.prototype = {
                     }
                 }
             }
-            console.log(xValues);
-            console.log(yValues);
+            console.log('Deflection');
+            console.log('Condition '+condition);
+            console.log('X Data '+xValues);
+            console.log('Y Data '+yValues);
+            console.log('=======================');
             return {
                 xValues: xValues,
                 yValues: yValues
@@ -145,8 +148,11 @@ BeamAnalysis.prototype = {
                     }
                 }
             }
-            // console.log(xValues);
-            // console.log(yValues);
+            console.log('Binding Moment');
+            console.log('Condition '+condition);
+            console.log('X Data '+xValues);
+            console.log('Y Data '+yValues);
+            console.log('=======================');
             return {
                 xValues: xValues,
                 yValues: yValues
@@ -197,8 +203,11 @@ BeamAnalysis.prototype = {
                     }
                 }
             }
-            // console.log(xValues);
-            // console.log(yValues);
+            console.log('Shear Force');
+            console.log('Condition '+condition);
+            console.log('X Data '+xValues);
+            console.log('Y Data '+yValues);
+            console.log('=======================');
             return {
                 xValues: xValues,
                 yValues: yValues

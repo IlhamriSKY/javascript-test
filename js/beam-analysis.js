@@ -46,7 +46,7 @@ BeamAnalysis.prototype = {
             var yValues = [];
             var getX = 0;
             if (condition == 'simply-supported') {
-                for (var x = 1; x <= beam.primarySpan; x += 1) {
+                for (getX = 0; getX <= beam.primarySpan;) {
                     xValues.push(getX);
                     yValues.push(equation(getX).y);
                     getX = getX + beam.primarySpan / 10;
@@ -86,8 +86,8 @@ BeamAnalysis.prototype = {
                     }
                 }
             }
-            // console.log(xValues);
-            // console.log(yValues);
+            console.log(xValues);
+            console.log(yValues);
             return {
                 xValues: xValues,
                 yValues: yValues
@@ -105,7 +105,7 @@ BeamAnalysis.prototype = {
             var yValues = [];
             let getX = 0;
             if (condition == 'simply-supported') {
-                for (var x = 1; x <= beam.primarySpan; x += 1) {
+                for (getX = 0; getX <= beam.primarySpan;) {
                     xValues.push(getX);
                     yValues.push(equation(getX).y);
                     getX = getX + beam.primarySpan / 10;

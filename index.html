@@ -73,29 +73,21 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas id="deflection_plot" width="100%" height="auto"></canvas>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="deflection_plot" width="100%" height="500"></canvas>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas id="shear_force_plot" width="100%" height="auto"></canvas>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="shear_force_plot" width="100%" height="500"></canvas>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <canvas id="bending_moment_plot" width="100%" height="auto"></canvas>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="bending_moment_plot" width="100%" height="500"></canvas>
                 </div>
             </div>
-        </div>
     </div>
 </body>
 <script src="assets/js/jquery-3.5.1.slim.min.js"></script>
@@ -147,9 +139,9 @@
         var bendingMomentData = beamAnalysis.getBendingMoment(beam, floatVal('w'), stringVal('condition'));
         var shearForceData = beamAnalysis.getShearForce(beam, floatVal('w'), stringVal('condition'));
         // Call method
-        plotter.deflection.plot(deflectionData, 'Deflection');
-        plotter.shearForce.plot(shearForceData, 'Shear Force (kN)');
-        plotter.bendingMoment.plot(bendingMomentData, 'Bending Moment (kNm)');
+        plotter.deflection.plot(deflectionData, 'Deflection (mm)');
+        plotter.shearForce.plot(shearForceData, 'Shear Force (V*)');
+        plotter.bendingMoment.plot(bendingMomentData, 'Bending Moment (M* kN-m)');
     });
     document.getElementById('clearData').addEventListener('click', function () {
         location.reload();

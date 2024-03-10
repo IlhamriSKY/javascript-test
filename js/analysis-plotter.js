@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * Plot result from the beam analysis calculation into a graph
  */
@@ -8,22 +9,34 @@ function AnalysisPlotter(container) {
 }
 AnalysisPlotter.prototype = {
     plot: function (data, chartName) {
+
+        // console.log(data);
+
         var ctx = document.getElementById(this.container).getContext('2d');
+
+        // Add +1 to each value on the X-axis
+        var adjustedXValues = data.xValues.map(function (value) {
+            return value + 1;
+        });
+
         // For debugging, where Chart.js will display positive data for the X-axis
         var adjustedValues = data.yValues.map(function (value) {
             // return Math.abs(value);
             return value;
         });
+
         // Contains data from the beam analysis calculation
         const valueData = {
-            labels: data.xValues,
+            labels: adjustedXValues,
             datasets: [{
                 data: adjustedValues,
                 borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderWidth: 1,
-                fill: false
+                fill: true
             }]
         };
+
         const options = {
             responsive: true,
             maintainAspectRatio: false,
@@ -34,13 +47,15 @@ AnalysisPlotter.prototype = {
                     title: {
                         display: true,
                         text: 'Span (m)'
-                    }
+                    },
+                    max: Math.max(...adjustedXValues) + 1 // Set the maximum X-axis value dynamically
                 },
                 y: {
                     ticks: {
                         beginAtZero: true,
-                        min: -100,
+                        stepSize: 20,
                         max: 100,
+                        min: -100,
                     },
                 }
             },
@@ -55,6 +70,7 @@ AnalysisPlotter.prototype = {
                 }
             },
         };
+
         // Create a new chart with updated data and options
         this.myChart = new Chart(ctx, {
             type: 'line',

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Plot result from the beam analysis calculation into a graph
@@ -9,14 +9,12 @@ function AnalysisPlotter(container) {
 }
 AnalysisPlotter.prototype = {
     plot: function (data, chartName) {
-
         // console.log(data);
+        var ctx = document.getElementById(this.container).getContext("2d");
 
-        var ctx = document.getElementById(this.container).getContext('2d');
-
-        // Add +1 to each value on the X-axis
+        // For adjust positive or negative value
         var adjustedXValues = data.xValues.map(function (value) {
-            return value + 1;
+            return value * 1;
         });
 
         // For debugging, where Chart.js will display positive data for the X-axis
@@ -28,13 +26,15 @@ AnalysisPlotter.prototype = {
         // Contains data from the beam analysis calculation
         const valueData = {
             labels: adjustedXValues,
-            datasets: [{
-                data: adjustedValues,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 1,
-                fill: true
-            }]
+            datasets: [
+                {
+                    data: adjustedValues,
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderWidth: 1,
+                    fill: true,
+                },
+            ],
         };
 
         const options = {
@@ -42,13 +42,31 @@ AnalysisPlotter.prototype = {
             maintainAspectRatio: false,
             scales: {
                 x: {
-                    type: 'linear',
-                    position: 'bottom',
+                    type: "linear",
+                    position: "bottom",
+                    beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Span (m)'
+                        text: "Span (m)",
                     },
-                    max: Math.max(...adjustedXValues) + 1 // Set the maximum X-axis value dynamically
+                    ticks: {
+                        callback: function (value) {
+                            return value;
+                        },
+                    },
+                    max: Math.max(...adjustedXValues) + 1, // Set the maximum X-axis value dynamically
+                },
+                xAxis2: {
+                    type: "linear",
+                    position: "center",
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    ticks: {
+                        callback: function (value) {
+                            return value*10;
+                        },
+                    },
                 },
                 y: {
                     ticks: {
@@ -56,26 +74,27 @@ AnalysisPlotter.prototype = {
                         stepSize: 20,
                         max: 100,
                         min: -100,
+                        crossAlign: "far",
                     },
-                }
+                },
             },
             plugins: {
                 title: {
                     display: true,
                     text: chartName,
-                    position: 'left'
+                    position: "left",
                 },
                 legend: {
-                    display: false
-                }
+                    display: false,
+                },
             },
         };
 
         // Create a new chart with updated data and options
         this.myChart = new Chart(ctx, {
-            type: 'line',
+            type: "line",
             data: valueData,
-            options: options
+            options: options,
         });
     },
 };

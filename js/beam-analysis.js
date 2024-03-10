@@ -64,7 +64,7 @@ BeamAnalysis.prototype = {
                     const getX1 = getX;
                     const getX2 = (xValues[x - 1] || 0);
                     xValues.push(parseFloat(getX.toFixed(3)));
-                    yValues.push(equation(getX).y);
+                    yValues.push(equation(x, getX).y);
                     if (getX1 === 0) {
                         getX = getX1 + total / 10;
                     } else if (Math.abs(getX1 - L1) <= total / 10 && getX1 - L1 < 0) {
@@ -275,19 +275,26 @@ BeamAnalysis.analyzer.twoSpanUnequal = function (beam, load) {
     this.beam = beam;
     this.load = load;
 };
-// Two Unequal Span Equal UDL Analyzer
+// 
 BeamAnalysis.analyzer.twoSpanUnequal.prototype = {
     getDeflectionEquation: function (beam, load) {
-        return function (x) {
+        return function (index, x) {
             let y = 0;
             const L1 = beam.primarySpan;
             const L2 = beam.secondarySpan;
             const EI = beam.material.properties.EI;
             const M1 = -((load * Math.pow(L2, 3)) + (load * Math.pow(L1, 3))) / (8 * (L1 + L2));
             const R1 = (M1 / L1) + ((load * L1) / 2);
+            const R3 = (M1 / L2) + ((load * L2) / 2);
+            const R2 = (load * L1) + (load * L2) - R1 - R3;
             const j2 = beam.j2;
-            y = (x / (24 * (EI / Math.pow(1000, 3))) * ((4 * R1 * (Math.pow(x, 2))) - (load * (Math.pow(x, 3))) + (load * (Math.pow(L1, 3))) - (4 * R1 * (Math.pow(L1, 2))))) * 1000 * j2;
-            y = (x / (24 * (EI / Math.pow(1000, 3)))) * ((4 * R1 * (Math.pow(x, 2))) - (load * (Math.pow(x, 3))) + (load * (Math.pow(L1, 3))) - (4 * R1 * (Math.pow(L1, 2)))) * 1000 * j2;
+
+            if(index <= 11){ // index start from 0
+                y = (x / (24 * (EI / Math.pow(1000, 3)))) * ((4 * R1 * (Math.pow(x, 2))) - (load * (Math.pow(x, 3))) + (load * (Math.pow(L1, 3))) - (4 * R1 * (Math.pow(L1, 2)))) * 1000 * j2;
+            }else{
+                y = (((R1 * x / 6) * (Math.pow(x, 2) - Math.pow(L1, 2))) + ((R2 * x / 6) * (Math.pow(x, 2) - (3 * L1 * x) + (3 * Math.pow(L1, 2)))) - (R2 * Math.pow(L1, 3) / 6) - ((load * x / 24) * (Math.pow(x, 3) - Math.pow(L1, 3)))) / (EI / Math.pow(1000, 3)) * 1000 * j2;
+            }
+
             return {
                 x: x,
                 y: y.toFixed(8)

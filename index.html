@@ -73,21 +73,93 @@
                 </div>
             </div>
         </div>
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="deflection_plot" width="100%" height="500"></canvas>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="deflection_plot" width="100%" height="500"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="shear_force_plot" width="100%" height="500"></canvas>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Span (m)</th>
+                                        <th>Deflection (mm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deflection_table_body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="bending_moment_plot" width="100%" height="500"></canvas>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="shear_force_plot" width="100%" height="500"></canvas>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Span (m)</th>
+                                        <th>Shear Force (V*)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="shear_force_table_body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="bending_moment_plot" width="100%" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Span (m)</th>
+                                        <th>Bending Moment (kN*m)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bending_moment_table_body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        
     </div>
 </body>
 <script src="assets/js/jquery-3.5.1.slim.min.js"></script>
@@ -108,6 +180,22 @@
     function stringVal(id) {
         return document.getElementById(id).value;
     }
+
+    function updateTable(data, tableId) {
+        var tableBody = document.getElementById(tableId);
+
+        tableBody.innerHTML = '';
+
+        for (var i = 0; i < data.xValues.length; i++) {
+            var row = `<tr>
+                            <td>x${i+1}</td>
+                            <td>${data.xValues[i]}</td>
+                            <td>${data.yValues[i]}</td>
+                       </tr>`;
+            tableBody.innerHTML += row;
+        }
+    }
+    
     document.getElementById('calculate').addEventListener('click', function (e) {
         var beam = new Beam();
         // Declare canvas
@@ -142,6 +230,11 @@
         plotter.deflection.plot(deflectionData, 'Deflection (mm)');
         plotter.shearForce.plot(shearForceData, 'Shear Force (V*)');
         plotter.bendingMoment.plot(bendingMomentData, 'Bending Moment (M* kN-m)');
+
+        // Update tables
+        updateTable(deflectionData, 'deflection_table_body');
+        updateTable(shearForceData, 'shear_force_table_body');
+        updateTable(bendingMomentData, 'bending_moment_table_body');
     });
     document.getElementById('clearData').addEventListener('click', function () {
         location.reload();

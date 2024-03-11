@@ -105,13 +105,12 @@ BeamAnalysis.prototype = {
             console.log('Y Data '+yValues);
             console.log('=======================');
             
-            let data = xValues.map((value, index) => {
-                return { x: value, y: yValues[index] };
-            });
-            data.sort((a, b) => a.x - b.x);
-            xValues = data.map(item => item.x);
-            yValues = data.map(item => item.y);    
-
+            // let data = xValues.map((value, index) => {
+            //     return { x: value, y: yValues[index] };
+            // });
+            // data.sort((a, b) => a.x - b.x);
+            // xValues = data.map(item => item.x);
+            // yValues = data.map(item => item.y);    
 
             return {
                 xValues: xValues,
@@ -261,16 +260,17 @@ BeamAnalysis.analyzer.simplySupported.prototype = {
             const shearForce = load * (beam.primarySpan / 2 - x);
             return {
                 x: x,
-                y: Math.round(shearForce)
+                y: shearForce
             };
         };
     },
     getBendingMomentEquation: function (beam, load) {
         return function (x) {
             const bendingMoment = -((load * x / 2) * (beam.primarySpan - x));
+
             return {
                 x: x,
-                y: Math.round(bendingMoment)
+                y: bendingMoment
             };
         };
     },
@@ -282,7 +282,7 @@ BeamAnalysis.analyzer.simplySupported.prototype = {
             const deflection = -((load * x) / (24 * EI)) * (Math.pow(L, 3) - 2 * L * Math.pow(x, 2) + Math.pow(x, 3)) * j2 * 1000;
             return {
                 x: x,
-                y: Math.round(deflection)
+                y: deflection
             };
         };
     },

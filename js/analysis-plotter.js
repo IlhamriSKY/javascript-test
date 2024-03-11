@@ -9,6 +9,23 @@ function AnalysisPlotter(container) {
 }
 AnalysisPlotter.prototype = {
     plot: function (data, chartName) {
+        // Shorting xValues
+        function shortData(data){
+            let newData = data.xValues.map((value, index) => {
+                return { x: value, y: data.yValues[index] };
+            });
+            newData.sort((a, b) => a.x - b.x);
+            let newxValues = newData.map(item => item.x);
+            let newyValues = newData.map(item => item.y);
+
+            return {
+                xValues: newxValues,
+                yValues: newyValues
+            };
+        }
+
+        data = shortData(data);
+
         var ctx = document.getElementById(this.container).getContext("2d");
 
         // For adjust positive or negative value
@@ -33,7 +50,7 @@ AnalysisPlotter.prototype = {
                     fill: true,
                     lineTension: 0.4,
                     cubicInterpolationMode: 'monotone',
-                    pointRadius: 4,
+                    pointRadius: 1,
                     pointStyle: 'circle',
                     pointBackgroundColor: 'rgba(255, 255, 255, 1)',
                     pointBorderColor: 'rgba(253,0,0,1)',

@@ -9,7 +9,6 @@ function AnalysisPlotter(container) {
 }
 AnalysisPlotter.prototype = {
     plot: function (data, chartName) {
-        // console.log(data);
         var ctx = document.getElementById(this.container).getContext("2d");
 
         // For adjust positive or negative value
@@ -19,7 +18,6 @@ AnalysisPlotter.prototype = {
 
         // For debugging, where Chart.js will display positive data for the X-axis
         var adjustedValues = data.yValues.map(function (value) {
-            // return Math.abs(value);
             return value;
         });
 
@@ -29,10 +27,22 @@ AnalysisPlotter.prototype = {
             datasets: [
                 {
                     data: adjustedValues,
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(253,0,0,1)",
+                    backgroundColor: "rgba(253, 192, 192, 0.2)",
                     borderWidth: 1,
                     fill: true,
+                    lineTension: 0.4,
+                    cubicInterpolationMode: 'monotone',
+                    pointRadius: 4,
+                    pointStyle: 'circle',
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                    pointBorderColor: 'rgba(253,0,0,1)',
+                    pointBorderWidth: 1,
+                    hoverRadius: 5,
+                    hoverBackgroundColor: 'rgba(253,0,0,1)',
+                    hoverBorderColor: 'rgba(253,0,0,1)',
+                    hoverBorderWidth: 2,
+                    showLine: true,
                 },
             ],
         };
@@ -54,28 +64,25 @@ AnalysisPlotter.prototype = {
                             return value;
                         },
                     },
-                    max: Math.max(...adjustedXValues) + 1, // Set the maximum X-axis value dynamically
+                    max: Math.max(...adjustedXValues) + 1,
                 },
                 xAxis2: {
                     type: "linear",
                     position: "center",
-                    grid: {
-                        drawOnChartArea: false,
+                    beginAtZero: true,
+                    title: {
+                        display: false,
+                        text: "Span (m)",
                     },
                     ticks: {
                         callback: function (value) {
-                            return value*10;
+                            return value;
                         },
                     },
+                    max: Math.max(...adjustedXValues) + 1,
                 },
                 y: {
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 20,
-                        max: 100,
-                        min: -100,
-                        crossAlign: "far",
-                    },
+                    beginAtZero: true,
                 },
             },
             plugins: {
@@ -87,12 +94,15 @@ AnalysisPlotter.prototype = {
                 legend: {
                     display: false,
                 },
+                tooltip: {
+                    enabled: true,
+                }
             },
         };
 
         // Create a new chart with updated data and options
         this.myChart = new Chart(ctx, {
-            type: "line",
+            type: "scatter",
             data: valueData,
             options: options,
         });

@@ -54,7 +54,8 @@ BeamAnalysis.prototype = {
             } else {
                 let x = 0;
                 let condition = true;
-                while (condition) {
+                let additionalIterations = 0;
+                while (condition || additionalIterations < 9) {
                     const L1 = beam.primarySpan;
                     const L2 = beam.secondarySpan;
                     const total = L1 + L2;
@@ -65,6 +66,7 @@ BeamAnalysis.prototype = {
                     const getX2 = (xValues[x - 1] || 0);
                     xValues.push(parseFloat(getX.toFixed(3)));
                     yValues.push(equation(x, getX).y);
+                
                     if (getX1 === 0) {
                         getX = getX1 + total / 10;
                     } else if (Math.abs(getX1 - L1) <= total / 10 && getX1 - L1 < 0) {
@@ -80,17 +82,37 @@ BeamAnalysis.prototype = {
                     } else {
                         getX = getX1 + total / 10;
                     }
+                
                     x++;
                     if (xValues[x - 1] >= total) {
                         condition = false;
                     }
+                
+                    if (!condition && additionalIterations < 9) {
+                        additionalIterations++;
+                        condition = true;
+                    }
                 }
+
+                for (let i = xValues.length - 9; i < xValues.length; i++) {
+                    xValues[i] = 0;
+                }
+
             }
             console.log('Deflection');
             console.log('Condition '+condition);
             console.log('X Data '+xValues);
             console.log('Y Data '+yValues);
             console.log('=======================');
+            
+            let data = xValues.map((value, index) => {
+                return { x: value, y: yValues[index] };
+            });
+            data.sort((a, b) => a.x - b.x);
+            xValues = data.map(item => item.x);
+            yValues = data.map(item => item.y);    
+
+
             return {
                 xValues: xValues,
                 yValues: yValues
@@ -289,15 +311,21 @@ BeamAnalysis.analyzer.twoSpanUnequal.prototype = {
             const R2 = (load * L1) + (load * L2) - R1 - R3;
             const j2 = beam.j2;
 
+            if(index > 13){
+                x = 0;
+            }
+
             if(index <= 11){ // index start from 0
                 y = (x / (24 * (EI / Math.pow(1000, 3)))) * ((4 * R1 * (Math.pow(x, 2))) - (load * (Math.pow(x, 3))) + (load * (Math.pow(L1, 3))) - (4 * R1 * (Math.pow(L1, 2)))) * 1000 * j2;
             }else{
                 y = (((R1 * x / 6) * (Math.pow(x, 2) - Math.pow(L1, 2))) + ((R2 * x / 6) * (Math.pow(x, 2) - (3 * L1 * x) + (3 * Math.pow(L1, 2)))) - (R2 * Math.pow(L1, 3) / 6) - ((load * x / 24) * (Math.pow(x, 3) - Math.pow(L1, 3)))) / (EI / Math.pow(1000, 3)) * 1000 * j2;
             }
 
+            // console.log('index '+index+'| x '+x+'| y '+y);
+
             return {
                 x: x,
-                y: y.toFixed(8)
+                y: y
             };
         };
     },
